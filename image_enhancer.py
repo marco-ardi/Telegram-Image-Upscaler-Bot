@@ -15,15 +15,15 @@ class imageEnhancer:
         self.sr4.readModel("./models/EDSR_x4.pb")
         self.sr4.setModel("edsr", 4)
     
-    def Enhance(self, sr_type : str) : 
-        img = cv2.imread("./input.png")
+    def Enhance(self, sr_type : str, path : str) : 
+        img = cv2.imread(path)
         if sr_type == "x2":
             result = self.sr2.upsample(img)
         elif sr_type == "x3":
             result = self.sr3.upsample(img)
         elif sr_type == "x4":
             result = self.sr2.upsample(img)
-        cv2.imwrite("./output.png", result)
+        cv2.imwrite(path[:len(path)-4] + "out.png", result)
     #sr = dnn_superres.DnnSuperResImpl_create()
 
     #image = cv2.imread("./input.png")
