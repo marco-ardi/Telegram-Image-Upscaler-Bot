@@ -11,8 +11,9 @@ Press Ctrl-C on the command line or send a signal to the process to stop the
 bot.
 """
 import time
+import os
 import logging
-from telegram import BotCommand
+from telegram import BotCommand, KeyboardButton, ReplyKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher
 
 from image_enhancer import imageEnhancer
@@ -23,8 +24,8 @@ logger = logging.getLogger(__name__)
 TOKEN = "5148449384:AAGSgPkYDmGGt-Hh1pvNv-SUkWK_YuxgfgQ"
 
 #command handlers
-def start(update, context):
-    update.message.reply_text("Hi!")
+#def start(update, context):
+#    update.message.reply_text("Hi!")
 
 def help(update, context):
     update.message.reply_text("Help!")
@@ -40,30 +41,41 @@ def image_handler(update, context):
 
 def text_handler(update, context):
     global enhancer
-    path = "./" + str(update.message.from_user.id) + ".png"
-
-    if update.message.text.lower() not in ("x2", "x3", "x4"):
-        update.message.reply_text("I didn't understood")
-    if update.message.text.lower() == "x2" :
-        enhancer.Enhance("x2", path)
-    elif update.message.text.lower() == "x3" :
-        enhancer.Enhance("x3", path)
-    elif update.message.text.lower() == "x4" :
-        enhancer.Enhance("x4", path)
-    time.sleep(15)
-    update.message.reply_photo(photo=open(path[:len(path)-4] + "out.png", "rb"))
-    
+    global path
+    global style
+    if "Upscale" in update.message.text:
+        buttons = [[KeyboardButton("x2")], [KeyboardButton("x3")], [KeyboardButton("x4")]]
+        update.message.reply_text("Please choose your upscale level", reply_markup = ReplyKeyboardMarkup(buttons))
+        #style = update.message.text[1]
+        update.message.reply_text("Please send your image to upscale")
+        path = "./" + str(update.message.from_user.id) + ".png"
+    if "x2" in update.message.text or "x3" in update.message.text or "x4" in update.message.text:
+        style = update.message.text
 
 
 def singleMethod(update, context):
     global enhancer
-    
-    update.message.reply_text("Please send your image to upscale")
+    global path
+    global style
+
+    #buttons = [[KeyboardButton("x2")], [KeyboardButton("x3")], [KeyboardButton("x4")]]
+    #update.message.reply_text("Please choose your upscale level", reply_markup = ReplyKeyboardMarkup(buttons))
+    #update.message.reply_text("Please send your image to upscale")
     file = update.message.photo[-1].file_id
     obj = context.bot.get_file(file)
-    path = "./" + str(update.message.from_user.id) + ".png"
+    #path = "./" + str(update.message.from_user.id) + ".png"
     obj.download(path)
-    update.message.reply_text("What kind of upscale do you want? \n x2 \t x3 \t x4")
+    print(f"style={style} \t path={path}")
+    if style == "x2" :
+        enhancer.Enhance("x2", path)
+    elif style == "x3" :
+        enhancer.Enhance("x3", path)
+    elif style == "x4" :
+        enhancer.Enhance("x4", path)
+    #update.message.reply_text("What kind of upscale do you want? \n x2 \t x3 \t x4")
+    if os.path.isfile(path[:len(path)-4] + "out.png"):
+        update.message.reply_photo(photo=open(path[:len(path)-4] + "out.png", "rb"))
+        os.remove(path[:len(path)-4] + "*")
 
     #if update.message.text.lower() == "x2" :
     #    enhancer.Enhance("x2", path)
@@ -98,6 +110,10 @@ def add_handlers(dp : Dispatcher):
     #errors
     dp.add_error_handler(error)
 
+def start(update, context):
+    buttons = [[KeyboardButton("Upscale")], [KeyboardButton("Help")]]
+    update.message.reply_text("Welcome", reply_markup = ReplyKeyboardMarkup(buttons))
+
 def main():
     #updater for bot
     updater = Updater(TOKEN, use_context=True)
@@ -119,5 +135,7 @@ def main():
     updater.idle()
 
 enhancer = imageEnhancer()
+path = ""
+style = "x2"
 if __name__ == '__main__':
     main()
