@@ -58,9 +58,6 @@ def singleMethod(update, context):
     global path
     global style
 
-    #buttons = [[KeyboardButton("x2")], [KeyboardButton("x3")], [KeyboardButton("x4")]]
-    #update.message.reply_text("Please choose your upscale level", reply_markup = ReplyKeyboardMarkup(buttons))
-    #update.message.reply_text("Please send your image to upscale")
     file = update.message.photo[-1].file_id
     obj = context.bot.get_file(file)
     #path = "./" + str(update.message.from_user.id) + ".png"
@@ -75,18 +72,9 @@ def singleMethod(update, context):
     #update.message.reply_text("What kind of upscale do you want? \n x2 \t x3 \t x4")
     if os.path.isfile(path[:len(path)-4] + "out.png"):
         update.message.reply_photo(photo=open(path[:len(path)-4] + "out.png", "rb"))
-        os.remove(path[:len(path)-4] + "*")
+        os.remove(path)
+        os.remove(path[:len(path)-4] + "out.png")
 
-    #if update.message.text.lower() == "x2" :
-    #    enhancer.Enhance("x2", path)
-    #elif update.message.text.lower() == "x3" :
-    #    enhancer.Enhance("x3", path)
-    #elif update.message.text.lower() == "x4" :
-    #    enhancer.Enhance("x4", path)
-    #else:
-    #    update.message.reply_text("I didn't understood")
-    #time.sleep(15)
-    #update.message.reply_photo(path[:len(path)-4] + "out.png")
 
 
 def error(update, context):
