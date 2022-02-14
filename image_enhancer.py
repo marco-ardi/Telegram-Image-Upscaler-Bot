@@ -1,4 +1,4 @@
-import torch
+#import torch
 import cv2
 from cv2 import dnn_superres
 # creating an sr object
@@ -16,14 +16,14 @@ class imageEnhancer:
         self.sr4.readModel("./models/EDSR_x4.pb")
 
         # sets GPU instead of CPU if CUDA is available
-        if torch.cuda.is_available():
-            print("Setting GPU instead of CPU")
-            self.sr2.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-            self.sr2.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
-            self.sr3.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-            self.sr3.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
-            self.sr4.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
-            self.sr4.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+#        if torch.cuda.is_available():
+#            print("Setting GPU instead of CPU")
+#            self.sr2.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+#            self.sr2.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+#            self.sr3.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+#            self.sr3.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
+#            self.sr4.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
+#            self.sr4.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)
         # setting models
         self.sr2.setModel("edsr", 2)
         self.sr3.setModel("edsr", 3)

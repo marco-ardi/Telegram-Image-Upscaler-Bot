@@ -1,0 +1,7 @@
+python-telegram-bot==13.9
+certifi==2020.6.20
+tornado>=6.1
+APScheduler==3.6.3
+pytz>=2018.6
+cachetools==4.2.2
+opencv-contrib-python

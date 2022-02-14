@@ -47,12 +47,12 @@ def text_handler(update, context):
             KeyboardButton("x4")]]
         update.message.reply_text(
             "Please choose your upscale level", reply_markup=ReplyKeyboardMarkup(buttons))
-        update.message.reply_text("Please send your image to upscale")
+        #update.message.reply_text()
         path = "./" + str(update.message.from_user.id) + ".png"
     if "x2" in update.message.text or "x3" in update.message.text or "x4" in update.message.text:
         style = update.message.text
         start_buttons = [[KeyboardButton("Upscale")], [KeyboardButton("Help")]]
-        update.message.reply_text("Please wait until your image is upscaled!",
+        update.message.reply_text("Please send your image to upscale",
                                   reply_markup=ReplyKeyboardMarkup(start_buttons))
 
 
@@ -65,6 +65,7 @@ def image_handler(update, context):
     obj = context.bot.get_file(file)
     obj.download(path)
     print(f"style={style} \t path={path}")
+    update.message.reply_text("Please wait until your image is upscaled!")
     if style == "x2":
         enhancer.Enhance("x2", path)
     elif style == "x3":
@@ -72,8 +73,9 @@ def image_handler(update, context):
     elif style == "x4":
         enhancer.Enhance("x4", path)
     if os.path.isfile(path[:len(path)-4] + "out.png"):
-        update.message.reply_photo(photo=open(
-            path[:len(path)-4] + "out.png", "rb"))
+        #this would compress the output image, so we sent it as a document instead
+        #update.message.reply_photo(photo=open(
+        #    path[:len(path)-4] + "out.png", "rb"))
         update.message.reply_document(document=open(
             path[:len(path)-4] + "out.png", "rb"))
         os.remove(path)
