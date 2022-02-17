@@ -15,6 +15,7 @@ Once it receives an image, an openCV model (ESDR) for upscaling will be applied 
 #### Docker
 ##### Steps
 - Clone this repository
+- Add your API token in row XXXXXX
 - **Run** `docker build --tag bot .`
 - **Run** `docker run bot`
 
