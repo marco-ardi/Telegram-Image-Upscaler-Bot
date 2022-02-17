@@ -1,6 +1,7 @@
 import cv2
 from cv2 import dnn_superres
 
+
 class imageEnhancer:
     sr2 = dnn_superres.DnnSuperResImpl_create()
     sr3 = dnn_superres.DnnSuperResImpl_create()
@@ -11,7 +12,7 @@ class imageEnhancer:
         self.sr2.readModel("./models/EDSR_x2.pb")
         self.sr3.readModel("./models/EDSR_x3.pb")
         self.sr4.readModel("./models/EDSR_x4.pb")
-        #if cuda is available, will set GPU instead of CPU for upscaling
+        # if cuda is available, will set GPU instead of CPU for upscaling
         print("Trying to set GPU instead of CPU")
         self.sr2.setPreferableBackend(cv2.dnn.DNN_BACKEND_CUDA)
         self.sr2.setPreferableTarget(cv2.dnn.DNN_TARGET_CUDA)

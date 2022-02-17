@@ -6,11 +6,13 @@ Click on upscale, then choose your upscale level and send your image, the bot
 will return the upscaled bot using image_enhancer.
 """
 import os
+import time
+import threading
 import logging
-from telegram import BotCommand, KeyboardButton, ReplyKeyboardMarkup
+from telegram import BotCommand, KeyboardButton, ReplyKeyboardMarkup, ChatAction
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher
 from image_enhancer import imageEnhancer
-# log info
+
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -18,9 +20,9 @@ TOKEN = "5148449384:AAGSgPkYDmGGt-Hh1pvNv-SUkWK_YuxgfgQ"
 
 
 def start(update, context):
-    buttons = [[KeyboardButton("Upscale")], [KeyboardButton("Help")]]
+    buttons = [[KeyboardButton("🔍 Upscale")]]
     update.message.reply_text(
-        "Welcome", reply_markup=ReplyKeyboardMarkup(buttons))
+        "Welcome to Image Upscaler Bot!", reply_markup=ReplyKeyboardMarkup(buttons))
 
 
 def help(update, context):
@@ -47,11 +49,11 @@ def text_handler(update, context):
             KeyboardButton("x4")]]
         update.message.reply_text(
             "Please choose your upscale level", reply_markup=ReplyKeyboardMarkup(buttons))
-        #update.message.reply_text()
+        # update.message.reply_text()
         path = "./" + str(update.message.from_user.id) + ".png"
     if "x2" in update.message.text or "x3" in update.message.text or "x4" in update.message.text:
         style = update.message.text
-        start_buttons = [[KeyboardButton("Upscale")], [KeyboardButton("Help")]]
+        start_buttons = [[KeyboardButton("🔍 Upscale")]]
         update.message.reply_text("Please send your image to upscale",
                                   reply_markup=ReplyKeyboardMarkup(start_buttons))
 
@@ -66,20 +68,26 @@ def image_handler(update, context):
     obj.download(path)
     print(f"style={style} \t path={path}")
     update.message.reply_text("Please wait until your image is upscaled!")
+    update.message.reply_chat_action(ChatAction.TYPING, timeout=60)
+    # create a thread for upscaling
     if style == "x2":
-        enhancer.Enhance("x2", path)
+        th = threading.Thread(target=enhancer.Enhance, args=("x2", path))
+        th.start()
     elif style == "x3":
-        enhancer.Enhance("x3", path)
+        th = threading.Thread(target=enhancer.Enhance, args=("x3", path))
+        th.start()
     elif style == "x4":
-        enhancer.Enhance("x4", path)
-    if os.path.isfile(path[:len(path)-4] + "out.png"):
-        #this would compress the output image, so we sent it as a document instead
-        #update.message.reply_photo(photo=open(
-        #    path[:len(path)-4] + "out.png", "rb"))
-        update.message.reply_document(document=open(
-            path[:len(path)-4] + "out.png", "rb"))
-        os.remove(path)
-        os.remove(path[:len(path)-4] + "out.png")
+        th = threading.Thread(target=enhancer.Enhance, args=("x4", path))
+        th.start()
+    # shows "Is typing" untill the response is not ready
+    while not (os.path.exists(path[:len(path)-4] + "out.png")):
+        update.message.reply_chat_action(ChatAction.TYPING, timeout=5)
+        time.sleep(6)
+
+    update.message.reply_document(document=open(
+        path[:len(path)-4] + "out.png", "rb"))
+    os.remove(path)
+    os.remove(path[:len(path)-4] + "out.png")
 
 
 def error(update, context):
@@ -100,7 +108,8 @@ def add_handlers(dp: Dispatcher):
     dp.add_handler(CommandHandler("help", help))
     # messages
     dp.add_handler(MessageHandler(Filters.text, text_handler))
-    dp.add_handler(MessageHandler(Filters.photo | Filters.document , image_handler))
+    dp.add_handler(MessageHandler(
+        Filters.photo | Filters.document, image_handler))
     # errors
     dp.add_error_handler(error)
 
