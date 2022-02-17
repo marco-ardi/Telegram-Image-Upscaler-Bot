@@ -12,14 +12,14 @@ The bot will ask users which kind of upscale to perform (_x2_, _x3_, _x4_) and i
 Once it receives an image, an openCV model (ESDR) for upscaling will be applied and the result image will be sent back.
 
 ## How to setup
-#### Docker
+### Docker
 ##### Steps
 - Clone this repository
 - Add your API token in row XXXXXX
 - **Run** `docker build --tag bot .`
 - **Run** `docker run bot`
 
-#### Local instance
+### Local instance
 ##### Requirements:
 - python >= 3.7 with the following modules:
   - python-telegram-bot.
