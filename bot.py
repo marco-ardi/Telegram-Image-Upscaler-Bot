@@ -34,12 +34,6 @@ def recognize(update, context):
     update.message.reply_text("Please send your image to upscale")
 
 
-def image_handler(update, context):
-    file = update.message.photo[-1].file_id
-    obj = context.bot.get_file(file)
-    obj.download("./" + str(update.message.from_user.id) + "photo.png")
-
-
 def text_handler(update, context):
     global enhancer
     global path
@@ -68,7 +62,7 @@ def image_handler(update, context):
     obj.download(path)
     print(f"style={style} \t path={path}")
     update.message.reply_text("Please wait until your image is upscaled!")
-    update.message.reply_chat_action(ChatAction.TYPING, timeout=60)
+    #update.message.reply_chat_action(ChatAction.TYPING, timeout=3)
     # create a thread for upscaling
     if style == "x2":
         th = threading.Thread(target=enhancer.Enhance, args=("x2", path))
@@ -117,7 +111,6 @@ def add_handlers(dp: Dispatcher):
 def main():
     # updater for bot
     updater = Updater(TOKEN, use_context=True)
-    dp = updater.dispatcher
     add_commands(updater)
     add_handlers(updater.dispatcher)
     updater.start_polling()
