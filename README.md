@@ -13,9 +13,20 @@ Once it receives an image, it will apply an opencv model (ESDR) for upscaling.
 
 ## How to setup
 #### Docker
+##### Steps
 - Clone this repository
 - **Run** `docker build --tag bot .`
 - **Run** `docker run bot`
+
 #### Local instance
 ##### Requirements:
--
+- python >= 3.7 with the following modules:
+  - python-telegram-bot.
+  - opencv-contrib-python
+-(optional) nvidia GPU and CUDA toolkit
+##### Steps
+- Clone this repository
+- Add your API token in row XXXXXX
+- **Run** `python bot.py`
+
+## Results
