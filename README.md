@@ -7,9 +7,9 @@ A simple telegram bot for Upscaling images.
 TODO: youtube link
 
 ## Introduction
-This bot was created with the purpose of upscaling images via telegram, in order to have higher resolution images for design or editing.
-The bot will ask what kind of upscale to perform (_x2_, _x3_, _x4_) and will wait for an image.
-Once it receives an image, it will apply an opencv model (ESDR) for upscaling.
+This bot was created with the purpose of upscaling images via Telegram, in order to have higher resolution images for design or editing.
+The bot will ask users which kind of upscale to perform (_x2_, _x3_, _x4_) and it will wait for an input image.
+Once it receives an image, an openCV model (ESDR) for upscaling will be applied and the result image will be sent back.
 
 ## How to setup
 #### Docker
