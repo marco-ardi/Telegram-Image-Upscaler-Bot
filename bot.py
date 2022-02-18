@@ -16,7 +16,7 @@ from image_enhancer import imageEnhancer
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
-TOKEN = "5148449384:AAGSgPkYDmGGt-Hh1pvNv-SUkWK_YuxgfgQ"
+TOKEN = "<your token here>"
 
 
 def start(update, context):
