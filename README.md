@@ -16,7 +16,7 @@ Once it receives an image, an openCV model ([EDSR](https://arxiv.org/abs/1707.02
 ### Docker
 ##### Steps
 - Clone this repository
-- Add your API token in row XXXXXX
+- Add your API token in bot.py in row 19
 - **Run** `docker build --tag bot .`
 - **Run** `docker run bot`
 
@@ -28,12 +28,11 @@ Once it receives an image, an openCV model ([EDSR](https://arxiv.org/abs/1707.02
 -(optional) nvidia GPU and CUDA toolkit
 ##### Steps
 - Clone this repository
-- Add your API token in row XXXXXX
+- Add your API token in bot.py in row 19
 - **Run** `python bot.py`
 
 ## Results
 Here you can see the comparison between EDSR upscaling and [Nearest Neighour](https://en.wikipedia.org/wiki/Nearest_neighbour_algorithm) or [Cubic interpolation](https://en.wikipedia.org/wiki/Bicubic_interpolation) upscaling:
-
 
 
 ![confronto - input output](https://user-images.githubusercontent.com/50525101/154659754-cdaaca1d-c222-45ba-aa53-287025a6ea30.png)
@@ -41,3 +40,5 @@ Here you can see the comparison between EDSR upscaling and [Nearest Neighour](ht
 
 ![confronto - nn output](https://user-images.githubusercontent.com/50525101/154659811-f2b2e032-e69a-4a40-ba77-e10e353f079c.png)
 
+
+![confronto - cubic output (1)](https://user-images.githubusercontent.com/50525101/154660739-cb6af7ac-de13-4601-a3a2-832bf08b7ecd.png)
